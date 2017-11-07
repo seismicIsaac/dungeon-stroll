@@ -1,0 +1,43 @@
+.view-port {
+  width: 100%;
+  height: 100%;
+  margin-top: 2px;
+  position: relative;
+}
+
+.map-view {
+  display: none;
+  background-color: lightsalmon;
+  width: 100%;
+  height: 100%;
+}
+
+.battle-view {
+  display: none;
+  background-color: black;
+  width: 100%;
+  height: 100%;
+}
+
+.character-screen-view {
+  display: none;
+  background-color: gray;
+  width: 100%;
+  height: 100%;
+}
+
+.view-port.map-active .map-view {
+  display: block;
+}
+
+.view-port.battle-active .battle-view {
+  display: block;
+}
+
+.view-port.character-screen-active .character-screen-view {
+  display: block;
+}
+
+.tile-row {
+  display: flex;
+}

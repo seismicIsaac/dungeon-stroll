@@ -1,0 +1,14 @@
+.party-member {
+  height: 120px;
+  position: relative;
+  border: 3px solid #030f21;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  background-color: darkgray;
+  margin: 2px;
+}
+
+.party-member.right {
+  flex-direction: row-reverse;
+}

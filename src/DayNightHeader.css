@@ -1,0 +1,38 @@
+.day-night-header {
+  height: 64px;
+  width: 100%;
+}
+
+.day-night-header.dawn {
+  background: darkblue;
+}
+
+.day-night-header.morning {
+  background-color: lightblue;
+}
+
+.day-night-header.noon {
+  background-color: dodgerblue;
+}
+
+.day-night-header.after-noon {
+  background-color: dodgerblue;
+}
+
+.day-night-header.dusk {
+  background-color: darkblue;
+}
+
+.day-night-header.night {
+  background-color: black;
+}
+
+.date-display {
+  width: 96px;
+  height: 64px;
+  background-color: white;
+}
+
+.sun-moon {
+  background: radial-gradient(circle at center,yellow, white);
+}

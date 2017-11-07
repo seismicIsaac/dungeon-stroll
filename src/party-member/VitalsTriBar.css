@@ -1,0 +1,8 @@
+.vitals-tri-bar {
+  display: flex;
+  margin: 0 3px;
+}
+
+.vitals-tri-bar .vertical-progress-bar {
+  transform: scaleY(-1);
+}

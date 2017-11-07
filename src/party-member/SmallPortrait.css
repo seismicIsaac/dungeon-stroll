@@ -1,0 +1,18 @@
+.small-portrait {
+  margin-top: 5px;
+  margin-left: 4px;
+  margin-right: 4px;
+  position: relative;
+  height: 100%;
+  width: 90px;
+}
+
+.small-portrait img {
+  height: 80%;
+  width: 100%;
+  border-radius: 26px;
+}
+
+.small-portrait p {
+  margin: auto;
+}

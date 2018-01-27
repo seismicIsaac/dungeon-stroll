@@ -3,7 +3,7 @@
   width: 32px;
   height: 32px;
   position: absolute;
-  background-image: url('./images/party-arrow.png');
+  background-image: url('../images/party-arrow.png');
 }
 
 .north {

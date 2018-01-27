@@ -1,12 +1,12 @@
 import React from 'react';
 import MapTile from './MapTile';
 import MapPartyArrow from './MapPartyArrow';
-import '.'
+import BattleView from './BattleView';
 import './ViewPort.css';
 
 class ViewPort extends React.Component {
   render() {
-    let activeView = 'map-active';
+    let activeView = this.props.battleState ? 'battle-active' : 'map-active';
 
     let viewableMap = this.props.viewableMap;
     const mapTiles = [];
@@ -28,7 +28,11 @@ class ViewPort extends React.Component {
             visionRadius={this.props.visionRadius}
           />
         </div>
-        <div className="battle-view"></div>
+        <div className="battle-view">
+          <BattleView 
+            battleState={this.props.battleState}
+          />
+        </div>
         <div className="character-screen-view"></div>
       </div>
     );

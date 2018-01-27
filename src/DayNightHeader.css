@@ -1,6 +1,6 @@
 .day-night-header {
   height: 64px;
-  width: 100%;
+  width: 850px;
 }
 
 .day-night-header.dawn {
@@ -19,6 +19,10 @@
   background-color: dodgerblue;
 }
 
+.day-night-header.sun-set {
+  background-image: linear-gradient(to bottom, darkblue 40%, orange);
+}
+
 .day-night-header.dusk {
   background-color: darkblue;
 }
@@ -34,5 +38,16 @@
 }
 
 .sun-moon {
-  background: radial-gradient(circle at center,yellow, white);
+  height: 64px;
+  width: 64px; 
+  position: absolute;
+  left: 1%;
+}
+
+.sun-moon.sun-time {
+  background-image: radial-gradient(circle at center, rgba(255, 255, 0, .9) 0%, rgba(255, 255, 255, .3) 50%, rgba(255, 255, 255, 0) 65%);
+}
+
+.sun-moon.moon-time {
+  background-image: radial-gradient(circle at center, rgba(255, 255, 255, .9) 0%, rgba(255, 255, 255, .3) 50%, rgba(255, 255, 255, 0) 65%);
 }

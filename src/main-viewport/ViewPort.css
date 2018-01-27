@@ -31,7 +31,7 @@
 }
 
 .view-port.battle-active .battle-view {
-  display: block;
+  display: flex;
 }
 
 .view-port.character-screen-active .character-screen-view {

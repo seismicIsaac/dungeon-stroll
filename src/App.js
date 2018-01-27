@@ -1,19 +1,26 @@
 import React, { Component } from 'react';
-import PartyMember from './party-member/PartyMember';
-import ViewPort from './ViewPort';
 import DayNightHeader from './DayNightHeader';
+import PartyMember from './party-member/PartyMember';
+import ViewPort from './main-viewport/ViewPort';
+import ControlPanel from './control-panel/ControlPanel';
 import './App.css';
+import './Global.css';
 import { calculateMapPositionUpdate, DIRECTION_NAMES } from './utils/movement-helper.js';
 import { translateKeyBoardEventToDirection } from './utils/user-input';
+import DungeonStrollController from './controller/DungeonStrollController';
 
-const PARTY_ENDPOINT = 'http://localhost:8080/dungeon-stroll/party/';
+const PARTY_ENDPOINT = 'http://localhost:8080/dungeon-stroll/game/';
 
 class App extends Component {
   constructor(props) {
     super(props);
+    this.dungeonStrollController = new DungeonStrollController(this);
     this.state = {
-      id: 1,
-      members: [],
+      gameId: 1,
+      party: {
+        members: [],
+        visionRadius: 3
+      },
       location: {
         x: 0,
         y: 0,
@@ -36,86 +43,78 @@ class App extends Component {
   }
 
   componentDidMount() {
-    fetch(PARTY_ENDPOINT, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-type': 'application/json',
-      },
-      body: JSON.stringify({
-        partyNames: ['Joel', 'Mike', 'Crow', 'Tom Servo', 'Gypsy', 'Pearl']
-      })
-    })
-    .then(res => res.json())
-    .then(res => this.setState(res.party));
+    this.createDefaultParty();
   }
 
   handleKeyDown(event) {
-    this.handleMove(translateKeyBoardEventToDirection(event.key));
+    this.handleMove(event.key);
   }
 
-  handleMove(direction) {
+  handleMove(eventKey) {
+    if (this.state.battleState) {
+      return;
+    }
+
+    let direction = translateKeyBoardEventToDirection(eventKey);
     let facingDirection = this.state.location.facingDirection;
     if (!direction) {
       return;
     }
     let movementDelta = calculateMapPositionUpdate(facingDirection, direction);
+    this.sendMovementCommand(movementDelta);
+  }
 
-    //TODO: Post to the dungeon-stroll-server to move =)
-    fetch(PARTY_ENDPOINT + this.state.id, {
-      method: 'PUT',
-      headers: {
-        'Accept': 'application/json',
-        'Content-type': 'application/json',
-      },
-      body: JSON.stringify({
-        movementDelta: movementDelta,
-        facingDirection: movementDelta.facingDirection
-      })
-    }).then(response => response.json())
-      .then(response => this.setState(response.party));
+  startDefaultCombatRound() {
+    this.dungeonStrollController.startDefaultCombatRound(this.state.gameId);
+  }
+
+  createDefaultParty() {
+    this.dungeonStrollController.createDefaultParty();
+  }
+
+  sendMovementCommand(movementDelta) {
+    this.dungeonStrollController.movementRequest(movementDelta);
   }
 
   render() {
     let partyMembersRight = [];
     let partyMembersLeft = [];
 
-    for (let i = 0; i < this.state.members.length; i++) {
+    for (let i = 0; i < this.state.party.members.length; i++) {
       let partyMemberRenderer = this.renderPartyMember(i);
-      (i % 2 === 0) ? partyMembersLeft.push(partyMemberRenderer) : partyMembersRight.push(partyMemberRenderer);
+      (i % 2 === 0)
+        ? partyMembersLeft.push(partyMemberRenderer) 
+        : partyMembersRight.push(partyMemberRenderer);
     }
 
     return (
       <div className="App">
-        <header className="App-header">
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <DayNightHeader dateTime={this.state.dateTime} />
-        <div className="main-view">
-          <div className="party-members left">
-            {partyMembersLeft}
-          </div>
-          <ViewPort 
-            viewableMap={this.state.viewableMap}
-            facingDirection={this.state.location.facingDirection}
-            visionRadius={this.state.visionRadius}
-          />
-          <div className="party-members right">
-            {partyMembersRight}
+        <div className="header-container">
+          <DayNightHeader dateTime={this.state.dateTime} />
+        </div>
+        <div className="main-view-container">
+          <div className="main-view">
+            <div className="party-members left">
+              {partyMembersLeft}
+            </div>
+            <ViewPort
+              battleState={this.state.battleState}
+              eventState={this.state.eventState}
+              viewableMap={this.state.viewableMap}
+              facingDirection={this.state.location.facingDirection}
+              visionRadius={this.state.party.visionRadius}
+            />
+            <div className="party-members right">
+              {partyMembersRight}
+            </div>
           </div>
         </div>
-        <div className="map-movement-buttons">
-          <div className="button-row top">
-            <button className="movement-button left" onClick={() => this.handleMove(DIRECTION_NAMES.leftTurn)}>{'G'}</button>
-            <button className="movement-button forward" onClick={() => this.handleMove(DIRECTION_NAMES.forward)}>{'^'}</button>
-            <button className="movement-button right" onClick={() => this.handleMove(DIRECTION_NAMES.rightTurn)}>{'J'}</button>
-          </div>
-
-          <div className="button-row bottom">
-            <button className="movement-button left" onClick={() => this.handleMove(DIRECTION_NAMES.left)}>{'<-'}</button>
-            <button className="movement-button forward" onClick={() => this.handleMove(DIRECTION_NAMES.backward)}>{'V'}</button>
-            <button className="movement-button right" onClick={() => this.handleMove(DIRECTION_NAMES.right)}>{'->'}</button>
-          </div>
+        <div className="bottom-panel-container">
+          <ControlPanel 
+            startCombatRoundAction={this.startDefaultCombatRound.bind(this)}
+            battleState={this.state.battleState}
+            eventState={this.state.eventState}
+          />
         </div>
       </div>
     );
@@ -124,13 +123,13 @@ class App extends Component {
   renderPartyMember(index) {
     return (
       <PartyMember
-        name={this.state.members[index].name}
-        health={this.state.members[index].health}
-        totalHealth={this.state.members[index].totalHealth}
-        stamina={this.state.members[index].stamina}
-        totalStamina={this.state.members[index].totalStamina}
-        mana={this.state.members[index].mana}
-        totalMana={this.state.members[index].totalMana}
+        name={this.state.party.members[index].name}
+        health={this.state.party.members[index].health}
+        totalHealth={this.state.party.members[index].totalHealth}
+        stamina={this.state.party.members[index].stamina}
+        totalStamina={this.state.party.members[index].totalStamina}
+        mana={this.state.party.members[index].mana}
+        totalMana={this.state.party.members[index].totalMana}
         key={index}
       />
     )

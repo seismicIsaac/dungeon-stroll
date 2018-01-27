@@ -1,0 +1,32 @@
+.tile.yellow-road {
+  background-color: yellow;
+}
+
+.tile.dirt {
+  background-color: brown;
+}
+
+.tile.grass { 
+  background-color: lightgreen;
+}
+
+.tile.gravel { 
+  background-color: gray;
+}
+
+.tile.mountain-grass {
+  background-image: url('../images/map-tiles/mountain-grass.png');
+}
+
+.tile.tree-grass {
+  background-image: url('../images/map-tiles/tree-grass.png');
+}
+
+.tile.water {
+  background-color: darkblue;
+}
+
+.tile {
+  width: 32px;
+  height: 32px;
+}

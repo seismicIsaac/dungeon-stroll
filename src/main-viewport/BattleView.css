@@ -1,0 +1,36 @@
+.battle-view {
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+}
+
+.monster {
+  width: 120px;
+  height: 120px;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.monster.id1 {
+  background-image: url('../images/Ahriman_398.png');
+}
+
+.monster.id2 {
+  background-image: url('../images/-behemoth.png');
+}
+
+.monster.id3 {
+  background-image: url('../images/Mindflayer-ff1-psp.png');
+}
+
+.monster.id4 {
+  background-image: url('../images/evil-link-1.png');
+}
+
+.monster-group {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  justify-content: center;
+}
